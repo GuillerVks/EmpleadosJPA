@@ -6,18 +6,14 @@
 
 package com.persistencia.servlets;
 
-import com.google.common.base.Predicates;
-import com.persistencia.Empleado;
-import com.persistencia.Puesto;
-import com.persistencia.controller.EmpleadoJpaController;
+import com.persistencia.*;
 import com.persistencia.controller.PuestoJpaController;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author alumno
  */
-public class Alta extends HttpServlet {
+public class ServletComboPuesto extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,38 +36,14 @@ public class Alta extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         EntityManagerFactory em = Persistence.createEntityManagerFactory("EmpleadosJPAPU");
-         EmpleadoJpaController cont = new EmpleadoJpaController(em);
-         PuestoJpaController cont2 = new PuestoJpaController(null, em);
+        PuestoJpaController cont = new PuestoJpaController(null, em);
         
-        String nombre = request.getParameter("TxNombre");
-        double salario = 0;
-        int idPuesto = 0;
-        try {
-            salario = Double.parseDouble(request.getParameter("TxSalario"));
-            idPuesto = Integer.parseInt(request.getParameter("Puesto"));
-        } catch (NumberFormatException numberFormatException) {
-        }
+        List<Puesto> puestos = cont.findPuestoEntities();
+        request.setAttribute("puestos", puestos);
         
-        Empleado emp = new Empleado();
-        emp.setNombre((nombre));
-        emp.setSalario(salario);
-        emp.setFechaAlta(new Date());
-        Puesto p = cont2.findPuesto(idPuesto);
-        emp.setIdPuesto(p);
-        
-        
-        request.setAttribute("emple", emp);
-        
-         
-        try {
-            cont.create(emp);
-        } catch (Exception ex) {
-            Logger.getLogger(Alta.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        response.sendRedirect("index.html");
+        RequestDispatcher dsp = getServletContext().getRequestDispatcher("/combopuestos.jsp");
+        dsp.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

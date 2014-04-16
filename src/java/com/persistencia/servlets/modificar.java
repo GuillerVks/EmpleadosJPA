@@ -6,11 +6,13 @@
 
 package com.persistencia.servlets;
 
-import com.persistencia.Empleado;
+import com.persistencia.*;
 import com.persistencia.controller.EmpleadoJpaController;
+import com.persistencia.controller.PuestoJpaController;
 import com.persistencia.controller.exceptions.RollbackFailureException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
@@ -41,6 +43,7 @@ public class modificar extends HttpServlet {
         
         EntityManagerFactory em = Persistence.createEntityManagerFactory("EmpleadosJPAPU");
         EmpleadoJpaController cont = new EmpleadoJpaController(em);
+        PuestoJpaController cont2 = new PuestoJpaController(null, em);
         
         String idEmp = request.getParameter("idMod");
         String EdEmp = request.getParameter("EdEmp");
@@ -74,6 +77,14 @@ public class modificar extends HttpServlet {
                 code += emp.getSalario();
                 code += " /><br />";
                 out.println(code);
+                // creamos el ddl puestos
+                List<Puesto> puestos = cont2.findPuestoEntities();
+                String Spuestos = "";
+                    for (int i = 0; i < puestos.size(); i++) {
+                        Spuestos += "<option value='"+puestos.get(i).getIdPuesto()+"'>"+puestos.get(i).getNombre()+"</option> ";
+                    }
+                out.println("Puesto: <select name=\"Puesto\">" + Spuestos + "</select> <br />");
+                // fin
                 out.println("<input type=\"submit\" name=\"EdEmp\" value=\"Editar\" />");
                 out.println("</form>");
                 out.println("</body>");
@@ -86,10 +97,13 @@ public class modificar extends HttpServlet {
             String id = request.getParameter("idEmpleado");
             String nombre = request.getParameter("TxNombre");
             String salario = request.getParameter("TxSalario");
+            int idPuesto = Integer.parseInt(request.getParameter("Puesto"));
+            Puesto p = cont2.findPuesto(idPuesto);
             Empleado editar = new Empleado();
             editar.setIdEmpleado(Integer.parseInt(id));
             editar.setNombre(nombre);
             editar.setSalario(Double.parseDouble(salario));
+            editar.setIdPuesto(p);
             
             if (nombre != null && salario !=null){
                 try {

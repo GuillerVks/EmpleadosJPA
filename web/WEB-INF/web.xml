@@ -12,6 +12,10 @@
         <servlet-name>modificar</servlet-name>
         <servlet-class>com.persistencia.servlets.modificar</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServletComboPuesto</servlet-name>
+        <servlet-class>com.persistencia.servlets.ServletComboPuesto</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Listado</servlet-name>
         <url-pattern>/Listado.html</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>modificar</servlet-name>
         <url-pattern>/editar.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletComboPuesto</servlet-name>
+        <url-pattern>/ServletComboPuesto</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

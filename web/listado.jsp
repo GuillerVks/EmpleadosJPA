@@ -17,10 +17,30 @@
                 padding:5px;
                 border-bottom:1px solid;
             }
+            th{
+                text-align:center;
+            }
         </style>
     </head>
     <body>
         <table>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Salario
+                </th>
+                <th>
+                    Fecha Alta
+                </th>
+                <th>
+                    Puesto
+                </th>
+            </tr>
              <c:forEach items="${emp}" var="emple" >
             <tr>
                 <td>
@@ -34,6 +54,9 @@
                 </td>
                 <td>
                     <fmt:formatDate value="${emple.fechaAlta}" />
+                </td>
+                <td>
+                    <c:out value="${emple.idPuesto.nombre}" default="Vacio" />
                 </td>
                 <td>
                     <form method="POST" action="eliminar.html">
