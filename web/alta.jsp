@@ -4,6 +4,7 @@
     Author     : alumno
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,6 +16,7 @@
         <form action="alta.html" method="POST">
             Nombre: <input type="text" name="TxNombre" /><br />
             Salario: <input type="text" name="TxSalario" /><br />
+            Puesto: <c:import url="/ServletComboPuesto" /><br />
             <input type="submit" value="Enviar" />
         </form>
     </body>
